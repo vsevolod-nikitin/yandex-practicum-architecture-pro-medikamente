@@ -1,0 +1,29 @@
+@startuml C4_Context
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+Person(patient, "Patient", "Пациент клиники")
+Person(admin, "Reception", "Сотрудник ресепшена")
+Person(doctor, "Doctor", "Медицинский специалист")
+Person(bookkeeper, "Bookkeeper", "Бухгалтер")
+
+System(med_system, "Medikamente Platform", "Платформа управления пациентами")
+
+System_Ext(lab, "Laboratory System", "Система лаборатории анализов")
+System_Ext(payment, "Payment Provider", "Платёжная система")
+
+System(mobile, "Mobile App", "Мобильное приложение пациента")
+System(data_analytics, "Analytics Platform", "BI / ML аналитика")
+
+Rel_R(patient, mobile, "Использует")
+Rel_R(mobile, med_system, "API")
+
+Rel(admin, med_system, "Управляет записями")
+Rel(doctor, med_system, "Просматривает данные")
+Rel(bookkeeper, med_system, "Работает с платежами")
+
+Rel(med_system, lab, "Получает результаты анализов")
+Rel(med_system, payment, "Обрабатывает платежи")
+
+Rel_R(med_system, data_analytics, "Передаёт данные для аналитики")
+
+@enduml
