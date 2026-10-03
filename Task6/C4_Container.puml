@@ -1,0 +1,25 @@
+@startuml C4_Container
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+Person(user, "Data Analyst", "Специалист по анализу данных, работающий с платформой")
+
+System_Boundary(system, "Data Analytics Platform") {
+Container(data_sources, "Data Sources", "Databases / APIs / Logs", "Системы и сервисы, предоставляющие данные: операционные БД, API и журналы событий")
+Container(ingestion, "Data Ingestion Service", "Kafka / ETL", "Забирает данные из источников и направляет их на дальнейшую обработку")
+Container(classification_engine, "Data Classification Engine", "Python / ML / Rules Engine", "Классифицирует данные по степени конфиденциальности")
+Container(privacy_processing, "Privacy Processing Service", "Masking / Tokenization / Encryption", "Защищает данные в соответствии с заданными правилами")
+Container(metadata_catalog, "Metadata Catalog", "Data Catalog", "Содержит метаинформацию, категории конфиденциальности и сведения о происхождении данных")
+Container(data_warehouse, "Data Warehouse", "Snowflake / BigQuery / PostgreSQL", "Хранит данные, предназначенные для аналитики")
+Container(monitoring, "Monitoring & Logging", "Prometheus / ELK", "Отслеживает состояние системы и фиксирует выполненные операции")
+}
+
+Rel(data_sources, ingestion, "Передают данные")
+Rel(ingestion, classification_engine, "Направляет данные на классификацию")
+Rel(classification_engine, privacy_processing, "Передает данные после классификации")
+Rel_L(classification_engine, metadata_catalog, "Записывает метаданные")
+Rel_L(privacy_processing, data_warehouse, "Сохраняет данные после защиты")
+Rel(user, data_warehouse, "Отправляет аналитические запросы")
+Rel(classification_engine, monitoring, "Передает метрики и журналы")
+Rel_R(privacy_processing, monitoring, "Регистрирует операции для аудита")
+
+@enduml
